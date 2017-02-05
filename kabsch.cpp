@@ -331,7 +331,7 @@ int main(int argc, char* argv[])
 
   QuatfToEuler(euler, q);
   double frmRadian2Degree = (double)(180.0/3.141592653589793);  
-  std::cout <<"deg:pitch:"<<  euler[0]* frmRadian2Degree << ":roll:" << euler[1]*frmRadian2Degree << ":pitch:"<< euler[2]*frmRadian2Degree << sep;
+  std::cout <<"deg:pitch:"<<  euler[0]* frmRadian2Degree << ":roll:" << euler[1]*frmRadian2Degree << ":yaw:"<< euler[2]*frmRadian2Degree << sep;
 
 
  
@@ -349,7 +349,7 @@ int main(int argc, char* argv[])
   q = fixed; 
   QuatfToEuler(euler, q);
 
-  std::cout <<"deg:pitch:"<<  euler[0]* frmRadian2Degree << ":roll:" << euler[1]*frmRadian2Degree << ":pitch:"<< euler[2]*frmRadian2Degree << sep;
+  std::cout <<"deg:pitch:"<<  euler[0]* frmRadian2Degree << ":roll:" << euler[1]*frmRadian2Degree << ":yaw:"<< euler[2]*frmRadian2Degree << sep;
 
 
   remappedpoints2 = atranspose * newLocal;
