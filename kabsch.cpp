@@ -13,6 +13,7 @@ using namespace std;
 Eigen::Affine3d Find3DAffineTransformScale(Eigen::Matrix3Xd in, Eigen::Matrix3Xd out);
 Eigen::Affine3d Find3DAffineTransform(Matrix3Xd P, Matrix3Xd Q); 
 void QuatfToEuler(Eigen::Vector3d& euler, const Eigen::Quaterniond& quat);
+Eigen::Matrix3Xd transform_frame1_to_frame2(Eigen::Affine3d A , Eigen::Matrix3Xd coordIn,Eigen::Matrix3Xd coordOut);
 #define MAXBUFSIZE  ((int) 1000)
 
 
@@ -24,6 +25,14 @@ Matrix3Xd readMatrix(const char *filename);
 // which best maps the first set to the second.
 // Source: http://en.wikipedia.org/wiki/Kabsch_algorithm
 
+// transform the coordinates inplace
+// Affine3d is a full transformation matric the rotation and translation information
+Eigen::Matrix3Xd transform_frame1_to_frame2(Eigen::Affine3d A , Eigen::Matrix3Xd coordIn,Eigen::Matrix3Xd coordOut)
+{
+  coordOut  = (A.linear()*coordIn).colwise() + A.translation();
+  
+  return coordOut;
+}
 
 // The input 3D points are stored as columns.
 Eigen::Affine3d Find3DAffineTransform(Matrix3Xd P, Matrix3Xd Q) {
@@ -268,7 +277,7 @@ int main(int argc, char* argv[])
         {
             if (i + 1 < argc)
             { // Make sure we aren't at the end of argv!
-                testNumber = std::atoi(argv[i+1]); // Increment 'i' so we don't get the argument as the next argv[i].
+                testNumber = std::atoi(argv[i+1]); // Increment 'i' so we don't get the argument as the next argv[i]
                 i++;
             }
             else
@@ -284,7 +293,7 @@ int main(int argc, char* argv[])
     }
 #endif
 
-    if(testNumber > 0)
+    if(testNumber == 1 )
     {
        TestFind3DAffineTransform();
        return 0;
@@ -338,6 +347,19 @@ int main(int argc, char* argv[])
   Matrix3Xd  remappedpoints;
   remappedpoints = (A.linear()*worldCoord).colwise() + A.translation();
   std::cout << remappedpoints << sep;
+  if (testNumber == 2)
+  {
+ 	 // test the actual call someone make make
+  	Matrix3Xd maxTrans1;
+  	Matrix3Xd maxTrans;
+
+  	maxTrans = transform_frame1_to_frame2(A , worldCoord,maxTrans1);
+  	std::cout << "original coordinates" << sep;
+  	std::cout << worldCoord << sep;
+  	std::cout << "transformed coordinates" << sep;
+  	std::cout << maxTrans << sep;
+  }
+
 
   std::cout << "remappedpoints from local to world" << sep;
   Matrix3Xd  remappedpoints2;
